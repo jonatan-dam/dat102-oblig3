@@ -4,6 +4,7 @@ import java.util.Arrays;
 import no.hvl.dat102.mengdeADT.MengdeADT;
 
 
+
 public class TabellMengde<T> implements MengdeADT<T> {
 
 	private T[] mengde;
@@ -45,6 +46,7 @@ public class TabellMengde<T> implements MengdeADT<T> {
 		return antall == 0;
 	} //end erTom
 
+
 	
 	@Override
 	public boolean inneholder(T element) {
@@ -57,6 +59,7 @@ public class TabellMengde<T> implements MengdeADT<T> {
 		
 		return false;
 	} //end inneholder
+	
 	
 
 	@Override
@@ -74,50 +77,120 @@ public class TabellMengde<T> implements MengdeADT<T> {
 	} //end erDelMengdeAv
 	
 
+	
 	@Override
 	public boolean erLik(MengdeADT<T> annenMengde) {
+		sjekkInitialisering();
 		
-		return false;
+		T[] trimmetMengde = trimTab(mengde, antall); // Trimmer mengden for å sørge for at lengden er lik antall elementer i mengden
 		
+		if(antall != annenMengde.antallElementer()) {
+			return false;
+		}
+		
+		for (T element : trimmetMengde) {
+			if(!annenMengde.inneholder(element)) {
+				return false;
+			}
+		}
+		
+		for(T element : annenMengde.tilTabell()) {
+			if(!inneholder(element)) {
+				return false;
+			}
+		}
+		
+		// Hvis begge betingelsene over er oppfylt, er mengdene like.
+		return true;
 	} //end erLik
 	
 
 	@Override
 	public boolean erDisjunkt(MengdeADT<T> annenMengde) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+		sjekkInitialisering();
+		
+		for(T element : mengde) {
+			if(annenMengde.inneholder(element)) {
+				return false;
+			}
+		}
+		
+		return true;
+	} //end erDisjunkt
+	
+	
 
 	@Override
 	public MengdeADT<T> snitt(MengdeADT<T> annenMengde) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		sjekkInitialisering();
+		
+		MengdeADT<T> snittMengde = new TabellMengde<>();
+		
+		for(T element : mengde) {
+			if(annenMengde.inneholder(element)) {
+				snittMengde.leggTil(element);
+			}
+		}
+		
+		return snittMengde;
+		
+	} //end snitt
+	
+	
 
 	@Override
 	public MengdeADT<T> union(MengdeADT<T> annenMengde) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		
+		MengdeADT<T> unionMengde = new TabellMengde<>();
+		
+		unionMengde.leggTilAlleFra(annenMengde);
+		
+		for(int i = 0; i < antall; i++) {
+			unionMengde.leggTil(mengde[i]);
+		}
+		
+		
+		return unionMengde;
+	} //end union
+	
+	
 
 	@Override
 	public MengdeADT<T> minus(MengdeADT<T> annenMengde) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		sjekkInitialisering();
+		
+		MengdeADT<T> differanseMengde = new TabellMengde<>();
+		
+		for(T element : mengde) {
+			if(!annenMengde.inneholder(element)) {
+				differanseMengde.leggTil(element);
+			}
+		}
+		
+		return differanseMengde;
+	} // end minus
+	
+	
 
 	@Override
 	public void leggTil(T element) {
 		sjekkInitialisering(); //Lar ikke metoden kjøre dersom mengden ikke er initialisert skikkelig
-		if(antall < mengde.length) { // Sjekker at det er plass
-			mengde[antall] = element;
-			antall++;
-		}else { // Dersom ikke plass, så utvides mengden før elementet legges til
-			mengde = utvid(mengde);
-			mengde[antall] = element;
-			antall++;
-		}
+		
+		if(!inneholder(element)) {
+			if(antall < mengde.length) { // Sjekker at det er plass
+				mengde[antall] = element;
+				antall++;
+			}else { // Dersom ikke plass, så utvides mengden før elementet legges til
+				mengde = utvid(mengde);
+				mengde[antall] = element;
+				antall++;
+			}
+		};
+		
+		
 	} //end leggTil
+	
+	
 
 	@Override
 	public void leggTilAlleFra(MengdeADT<T> annenMengde) {
@@ -143,7 +216,9 @@ public class TabellMengde<T> implements MengdeADT<T> {
 			if(mengde[i].equals(element)) {
 				tempElement = mengde[i];
 				mengde[i] = null;
+				antall--;
 				return tempElement;
+				
 			} //end if
 		} //end løkke
 		
@@ -151,6 +226,7 @@ public class TabellMengde<T> implements MengdeADT<T> {
 	} //end fjern
 	
 
+	
 	@Override
 	public T[] tilTabell() {
 		sjekkInitialisering();
@@ -184,6 +260,19 @@ public class TabellMengde<T> implements MengdeADT<T> {
 		return fullTab;
 	} //end utvid
 	
+	
+	private T[] trimTab(T[] tab, int n) {
+		sjekkInitialisering(); // Lar ikke metoden kjøre på mengde som ikke er opprettet på skikkelig måte
+		//n er antall elementer
+		@SuppressWarnings("unchecked")
+		T[] nyTab = (T[]) new Object[n];
+		int i = 0;
+		while (i < n) {
+			nyTab[i] = tab[i];
+			i++;
+		}
+		return nyTab;
+	} //end trimTab
 	
 	
 	/** Kaster et SecurityException om objektet ikke er intialisert skikkelig */

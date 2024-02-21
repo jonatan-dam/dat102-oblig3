@@ -18,6 +18,7 @@ public class TabellMengdeTest {
 	private MengdeADT<Integer> mengde1;
 	private MengdeADT<Integer> mengde2;
 	private MengdeADT<Integer> mengde3;
+	private MengdeADT<Integer> mengde4;
 	
 	@BeforeEach
 	void nullstill() {
@@ -34,6 +35,9 @@ public class TabellMengdeTest {
 		mengde3 = new TabellMengde<Integer>();
 		mengde3.leggTil(3);
 		mengde3.leggTil(1);
+		
+		mengde4 = new TabellMengde<Integer>();
+		mengde4.leggTil(3);
 	}
 	
 	/** Ting som må testes for en TabellMengde:
@@ -66,6 +70,7 @@ public class TabellMengdeTest {
 		assertFalse(mengde1.erTom());
 		assertFalse(mengde2.erTom());
 		assertFalse(mengde3.erTom());
+		assertFalse(mengde4.erTom());
 	} //end mengdeMedElementerSkalIkkeVaereTom
 	
 	
@@ -74,6 +79,8 @@ public class TabellMengdeTest {
 		mengde0.leggTil(1);
 		assertFalse(mengde0.erTom());
 		assertTrue(mengde0.inneholder(1));
+		mengde0.leggTil(1);
+		assertEquals(mengde0, mengde1);
 	} //end leggTilSkalLeggeTilEtElement
 	
 	
@@ -83,6 +90,7 @@ public class TabellMengdeTest {
 		assertFalse(mengde1.erTom());
 		assertFalse(mengde2.erTom());
 		assertFalse(mengde3.erTom());
+		assertFalse(mengde4.erTom());
 	} //end erTomSkalSjekkeOmMengdeErTom
 	
 	
@@ -90,38 +98,52 @@ public class TabellMengdeTest {
 	void erDelMengdeAvSkalSjekkeOmMengdeErDelmendeAvAnnenMengde() {
 		assertTrue(mengde1.erDelmengdeAv(mengde2));
 		assertFalse(mengde2.erDelmengdeAv(mengde1));
+		assertTrue(mengde4.erDelmengdeAv(mengde3));
+		assertFalse(mengde3.erDelmengdeAv(mengde0));
 	} //end erDelMengdeAvSkalSjekkeOmMengdeErDelmendeAvAnnenMengde
 	
 	
 	@Test
 	void erLikSkalSjekkeOmMengdeErLikAnnenMengde() {
 		assertTrue(mengde2.erLik(mengde3));
-		//assertFalse(mengde1.erLik(mengde2));
-		//assertFalse(mengde0.erLik(mengde1));
+		assertFalse(mengde1.erLik(mengde2));
+		assertFalse(mengde0.erLik(mengde1));
 	} //end erLikSkalSjekkeOmMengdeErLikAnnenMengde
 	
 	
 	@Test
 	void erDisjunktSkalSjekkeOmToMengderErDisjunkte() {
-		// TO DO
+		assertFalse(mengde1.erDisjunkt(mengde2));
+		assertFalse(mengde2.erDisjunkt(mengde4));
+		assertFalse(mengde3.erDisjunkt(mengde2));
+		assertTrue(mengde0.erDisjunkt(mengde1));
+		assertTrue(mengde4.erDisjunkt(mengde1));
+		
 	} //end erDisjunktSkalSjekkeOmToMengderErDisjunkte
 	
 	
 	@Test
 	void snittSkalFinneSnittetAvToMengder() {
-		// TO DO
+		assertEquals(mengde2.snitt(mengde1), mengde1);
+		assertEquals(mengde3.snitt(mengde2), mengde2);
+		assertEquals(mengde4.snitt(mengde1), mengde0);
 	} //end snittSkalFinneSnittetAvToMengder
 	
 	
 	@Test
 	void unionSkalFinneUnionAvToMengder() {
-		// TO DO
+		assertEquals(mengde1.union(mengde4), mengde2);
+		assertEquals(mengde3.union(mengde0), mengde3);
+		assertEquals(mengde2.union(mengde3), mengde2);
 	} //end unionSkalFinneUnionAvToMengder
 	
 	
 	@Test
 	void minusSkalFinneDifferansenAvToMengder() {
-		// TO DO
+		assertEquals(mengde2.minus(mengde1), mengde4);
+		assertEquals(mengde2.minus(mengde0), mengde2);
+		assertEquals(mengde3.minus(mengde4), mengde1);
+		assertEquals(mengde2.minus(mengde3), mengde0);
 	} //end minusSkalFinneDifferansenAvToMengder
 	
 	
@@ -134,6 +156,8 @@ public class TabellMengdeTest {
 	void fjernSkalFjerneOgReturnereElementFraMengden() {
 		assertEquals(mengde2.fjern(3), 3);
 		assertFalse(mengde2.inneholder(3));
+		assertEquals(mengde1.fjern(1), 1);
+		assertTrue(mengde1.erTom());
 	} //end fjernSkalFjerneOgReturnereElementFraMengden
 	
 	
