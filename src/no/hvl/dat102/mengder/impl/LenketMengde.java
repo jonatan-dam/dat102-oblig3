@@ -356,7 +356,7 @@ public class LenketMengde<T> implements MengdeADT<T> {
 	        otherNode = otherNode.neste;
 	    }
 	    return true;
-	}
+	} //end equals
 
 	
 	
