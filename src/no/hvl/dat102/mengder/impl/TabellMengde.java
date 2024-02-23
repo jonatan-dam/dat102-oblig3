@@ -176,7 +176,7 @@ public class TabellMengde<T> implements MengdeADT<T> {
 	public void leggTil(T element) {
 		sjekkInitialisering(); //Lar ikke metoden kjøre dersom mengden ikke er initialisert skikkelig
 		
-		if(!inneholder(element)) {
+		if(!inneholder(element)) { // Sjekker at mengden ikke allerede inneholder elementet
 			if(antall < mengde.length) { // Sjekker at det er plass
 				mengde[antall] = element;
 				antall++;
@@ -311,7 +311,7 @@ public class TabellMengde<T> implements MengdeADT<T> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		TabellMengde other = (TabellMengde) obj;
+		TabellMengde<?> other = (TabellMengde<?>) obj;
 		return Arrays.deepEquals(mengde, other.mengde);
 	} //end equals
 

@@ -158,7 +158,12 @@ public class TabellMengdeTest {
 	
 	@Test
 	void leggTilAlleSkalLeggeTilAlleElementerSomIkkeErDuplikatFraEnAnnenMengde() {
-		// TO DO
+		mengde0.leggTilAlleFra(mengde3);
+		assertTrue(mengde0.inneholder(1));
+		assertTrue(mengde0.inneholder(3));
+		assertEquals(mengde0, mengde3);
+		mengde1.leggTilAlleFra(mengde2);
+		
 	} //end leggTilAlleSkalLeggeTilAlleElementerSomIkkeErDuplikatFraEnAnnenMengde
 	
 	@Test

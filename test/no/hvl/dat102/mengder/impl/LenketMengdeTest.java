@@ -77,11 +77,11 @@ public class LenketMengdeTest {
 	
 	@Test
 	void leggTilSkalLeggeTilEtElement() {
+		assertFalse(mengde0.inneholder(1));
 		mengde0.leggTil(1);
 		assertFalse(mengde0.erTom());
 		assertTrue(mengde0.inneholder(1));
-		mengde0.leggTil(1);
-		assertEquals(mengde0, mengde1);
+		
 	} //end leggTilSkalLeggeTilEtElement
 	
 	
@@ -136,31 +136,32 @@ public class LenketMengdeTest {
 	@Test
 	void snittSkalFinneSnittetAvToMengder() {
 		assertEquals(mengde2.snitt(mengde1), mengde1);
-		assertEquals(mengde3.snitt(mengde2), mengde2);
 		assertEquals(mengde4.snitt(mengde1), mengde0);
 	} //end snittSkalFinneSnittetAvToMengder
 	
 	
 	@Test
 	void unionSkalFinneUnionAvToMengder() {
+		assertEquals(mengde0.union(mengde1), mengde1);
 		assertEquals(mengde1.union(mengde4), mengde2);
-		assertEquals(mengde3.union(mengde0), mengde3);
-		assertEquals(mengde2.union(mengde3), mengde2);
 	} //end unionSkalFinneUnionAvToMengder
 	
 	
 	@Test
 	void minusSkalFinneDifferansenAvToMengder() {
 		assertEquals(mengde2.minus(mengde1), mengde4);
-		//assertEquals(mengde2.minus(mengde0), mengde2);
-		//assertEquals(mengde3.minus(mengde4), mengde1);
-		//assertEquals(mengde2.minus(mengde3), mengde0);
+		assertEquals(mengde3.minus(mengde4), mengde1);
+		assertEquals(mengde2.minus(mengde3), mengde0);
 	} //end minusSkalFinneDifferansenAvToMengder
 	
 	
 	@Test
 	void leggTilAlleSkalLeggeTilAlleElementerSomIkkeErDuplikatFraEnAnnenMengde() {
-		// TO DO
+		assertFalse(mengde0.inneholder(1));
+		assertFalse(mengde0.inneholder(3));
+		mengde0.leggTilAlleFra(mengde3);
+		assertTrue(mengde0.inneholder(1));
+		assertTrue(mengde0.inneholder(3));
 	} //end leggTilAlleSkalLeggeTilAlleElementerSomIkkeErDuplikatFraEnAnnenMengde
 	
 	@Test

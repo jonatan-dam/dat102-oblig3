@@ -1,6 +1,8 @@
 package no.hvl.dat102.mengder.impl;
 
 
+import java.util.Objects;
+
 import no.hvl.dat102.mengdeADT.MengdeADT;
 
 public class LenketMengde<T> implements MengdeADT<T> {
@@ -30,39 +32,93 @@ public class LenketMengde<T> implements MengdeADT<T> {
 	public boolean inneholder(T element) {
 		sjekkInitialisering();
 		
+		int index = 0;
 		Node currentNode = forsteNode;
 		
-		while (currentNode != null) {
+		while (index < antall && currentNode != null) {
 			if(element.equals(currentNode.data)) {
 				return true;
 			}
 			currentNode = currentNode.neste;
+			index++;
 		}
 		
 		return false;
-		//return (finnReferanse(element) != null);
 	} //end inneholder
 	
 
 	@Override
 	public boolean erDelmengdeAv(MengdeADT<T> annenMengde) {
-		// TODO Auto-generated method stub
-		return false;
+		sjekkInitialisering();
+		
+		int index = 0;
+		Node currentNode = forsteNode;
+		
+		while (index < antall) {
+			if(currentNode.data != null && !annenMengde.inneholder(currentNode.data)) {
+				return false; // Dersom annenMengde ikke inneholder et element fra vår opprinnelige mengde,
+				              // er vår opprinnelige mengde ikke en delmengde av annenMengde
+			} //end if
+			
+			currentNode = currentNode.neste;
+			index++;
+		} //end while
+		
+		return true;
+		
 	} //end erDelmengdeAv
 	
 
 	@Override
 	public boolean erLik(MengdeADT<T> annenMengde) {
-		// TODO Auto-generated method stub
-		return false;
+
+		if(antall != annenMengde.antallElementer()) {
+			return false;
+		}
+		
+		int index = 0;
+		Node currentNode = forsteNode;
+		
+		
+		while(index < antall) {
+			if(!annenMengde.inneholder(currentNode.data)) {
+				
+				return false;	
+			} //end if
+			
+			index++;
+			currentNode = currentNode.neste;
+			
+		} //end while
+		
+		for(T element : annenMengde.tilTabell()) {
+			if(!inneholder(element)) {
+				return false;
+			}
+		} //end for-løkke
+
+		return true;
 	} //end erLik
 	
 	
 
 	@Override
 	public boolean erDisjunkt(MengdeADT<T> annenMengde) {
-		// TODO Auto-generated method stub
-		return false;
+		sjekkInitialisering();
+		
+		int index = 0;
+		Node currentNode = forsteNode;
+		
+		while(index < antall) {
+			if(annenMengde.inneholder(currentNode.data)) {
+				return false;
+			} //end if
+			
+			currentNode = currentNode.neste;
+			index++;
+		} //end while
+		
+		return true;
 	} //end erDisjunkt
 	
 	
@@ -72,7 +128,18 @@ public class LenketMengde<T> implements MengdeADT<T> {
 		sjekkInitialisering();
 		
 		MengdeADT<T> snittMengde = new LenketMengde<>();
+		int index = 0;
+		Node currentNode = forsteNode;
 		
+		while(index < antall) {
+			if(annenMengde.inneholder(currentNode.data)) {
+				snittMengde.leggTil(currentNode.data);
+			} //end if
+			
+			currentNode = currentNode.neste;
+			index++;
+			
+		} //end while
 		
 		return snittMengde;
 	} //end snitt
@@ -81,8 +148,23 @@ public class LenketMengde<T> implements MengdeADT<T> {
 
 	@Override
 	public MengdeADT<T> union(MengdeADT<T> annenMengde) {
-		// TODO Auto-generated method stub
-		return null;
+		sjekkInitialisering();
+		MengdeADT<T> unionMengde = new LenketMengde<>();
+		
+		unionMengde.leggTilAlleFra(annenMengde);
+
+		int index = 0;
+		Node currentNode = forsteNode;
+		
+		while(index < antall) {
+			unionMengde.leggTil(currentNode.data);
+			
+			currentNode = currentNode.neste;
+			index++;
+		}
+		
+		
+		return unionMengde;
 	} //end union
 	
 	
@@ -250,6 +332,34 @@ public class LenketMengde<T> implements MengdeADT<T> {
 		
 		
 	} //end Node
+	
+	@Override
+	public boolean equals(Object obj) {
+	    if (this == obj) {
+	        return true;
+	    }
+	    if (obj == null || getClass() != obj.getClass()) {
+	        return false;
+	    }
+	    LenketMengde<?> other = (LenketMengde<?>) obj;
+	    if (antall != other.antall) {
+	        return false;
+	    }
+	    Node currentNode = forsteNode;
+	    @SuppressWarnings("unchecked")
+		Node otherNode = (LenketMengde<T>.Node) other.forsteNode;
+	    while (currentNode != null) {
+	        if (!Objects.equals(currentNode.data, otherNode.data)) {
+	            return false;
+	        }
+	        currentNode = currentNode.neste;
+	        otherNode = otherNode.neste;
+	    }
+	    return true;
+	}
+
+	
+	
 	
 	
 	
