@@ -13,14 +13,14 @@ public class HobbyMatchMain {
 		
 		Person petter = new Person("Petter", "jakt", "tur", "fotball");
 		
-		System.out.println(match(petter, lise));
+		System.out.println(match(arne, arne));
 	}
 	
 	static double match(Person a, Person b) {
 		Set<String> aHobbyer = a.getHobbyer();
 		Set<String> bHobbyer = b.getHobbyer();
 		
-		int totaleHobbyer = aHobbyer.size() + bHobbyer.size();
+		
 		int fellesHobbyer = 0;
 		int aEgenHobby = 0;
 		int bEgenHobby = 0;
@@ -39,13 +39,12 @@ public class HobbyMatchMain {
 		hobbyIterator = bHobbyer.iterator();
 		
 		while(hobbyIterator.hasNext()) {
-			if(aHobbyer.contains(hobbyIterator.next())) {
-				fellesHobbyer++;
-			}else {
+			if(!aHobbyer.contains(hobbyIterator.next())) {
 				bEgenHobby++;
 			} //end if
 		} // end while
 		
+		int totaleHobbyer = fellesHobbyer + aEgenHobby + bEgenHobby;
 		matchScore = fellesHobbyer - (aEgenHobby + bEgenHobby) / totaleHobbyer;
 
 		return matchScore;

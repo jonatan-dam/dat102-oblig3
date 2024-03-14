@@ -197,13 +197,9 @@ public class TabellMengde<T> implements MengdeADT<T> {
 		sjekkInitialisering();
 		
 		for(T element : annenMengde.tilTabell()) {
-			
-			if(!inneholder(element)) {
-				
 				leggTil(element);
-				
-			}
 		}
+		
 	} //end leggTilAlleFRa
 	
 
